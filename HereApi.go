@@ -55,8 +55,6 @@ func GetPicture(appId, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	return response
 }
 
-
-
 func getCoordinatesFromJson(response []byte) (float64, float64) {
 	var lat, lon float64
 	js, err := jason.NewObjectFromBytes(response)
