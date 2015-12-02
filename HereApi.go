@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/antonholmquist/jason"
+	"antonholmquist/jason"
 	"github.com/artemnikitin/android-go-shared/builder"
 )
 
