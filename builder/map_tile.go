@@ -7,7 +7,7 @@ import (
 
 type MapTileService interface {
 	SetHost(string) MapTileService
-	SetAppId(string) MapTileService
+	SetAppID(string) MapTileService
 	SetAppToken(string) MapTileService
 	SetLatitude(float64) MapTileService
 	SetLongitude(float64) MapTileService
@@ -19,7 +19,7 @@ type MapTileService interface {
 
 type mapService struct {
 	host      string
-	appId     string
+	appID     string
 	appToken  string
 	latitude  float64
 	longitude float64
@@ -37,8 +37,8 @@ func (ms *mapService) SetHost(host string) MapTileService {
 	return ms
 }
 
-func (ms *mapService) SetAppId(id string) MapTileService {
-	ms.appId = id
+func (ms *mapService) SetAppID(id string) MapTileService {
+	ms.appID = id
 	return ms
 }
 
@@ -76,7 +76,7 @@ func (ms *mapService) Build() string {
 	var buffer bytes.Buffer
 	buffer.WriteString(ms.host)
 	buffer.WriteString("/mia/1.6/mapview?app_id=")
-	buffer.WriteString(ms.appId)
+	buffer.WriteString(ms.appID)
 	buffer.WriteString("&app_code=")
 	buffer.WriteString(ms.appToken)
 	buffer.WriteString("&c=")

@@ -7,7 +7,7 @@ import (
 
 type GeocodingService interface {
 	SetHost(string) GeocodingService
-	SetAppId(string) GeocodingService
+	SetAppID(string) GeocodingService
 	SetAppToken(string) GeocodingService
 	SetSearchPhrase(string) GeocodingService
 	Build() string
@@ -15,7 +15,7 @@ type GeocodingService interface {
 
 type geocodingService struct {
 	host         string
-	appId        string
+	appID        string
 	appToken     string
 	searchString string
 }
@@ -29,8 +29,8 @@ func (gs *geocodingService) SetHost(host string) GeocodingService {
 	return gs
 }
 
-func (gs *geocodingService) SetAppId(id string) GeocodingService {
-	gs.appId = id
+func (gs *geocodingService) SetAppID(id string) GeocodingService {
+	gs.appID = id
 	return gs
 }
 
@@ -48,7 +48,7 @@ func (gs *geocodingService) Build() string {
 	var buffer bytes.Buffer
 	buffer.WriteString(gs.host)
 	buffer.WriteString("/6.2/geocode.json?app_id=")
-	buffer.WriteString(gs.appId)
+	buffer.WriteString(gs.appID)
 	buffer.WriteString("&app_code=")
 	buffer.WriteString(gs.appToken)
 	buffer.WriteString("&searchtext=")

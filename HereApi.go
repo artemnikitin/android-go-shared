@@ -11,9 +11,9 @@ import (
 	"github.com/artemnikitin/android-go-shared/builder"
 )
 
-func GetCoordinates(appId, appToken, searchText string) string {
+func GetCoordinates(appID, appToken, searchText string) string {
 	builder := builder.NewGeocodingService()
-	builder = builder.SetHost("http://geocoder.cit.api.here.com").SetAppId(appId).SetAppToken(appToken)
+	builder = builder.SetHost("http://geocoder.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetSearchPhrase(searchText).Build()
 	var result string
 	resp, err := http.Get(url)
@@ -28,17 +28,17 @@ func GetCoordinates(appId, appToken, searchText string) string {
 			log.Fatal(err)
 			log.Fatal("Can't get a JSON response ...")
 		}
-		lat, lon := getCoordinatesFromJson(bytes)
+		lat, lon := getCoordinatesFromJSON(bytes)
 		result = createStringFromCoordinates(lat, lon)
 	}
 	return result
 }
 
-func GetPicture(appId, appToken string, lat, lon float64, h, w, dpi int) []byte {
+func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte {
 	builder := builder.NewMapTileService()
-	builder = builder.SetHost("http://image.maps.cit.api.here.com").SetAppId(appId).SetAppToken(appToken)
+	builder = builder.SetHost("http://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetLatitude(lat).SetLongitude(lon).SetWidth(w).SetHeight(h).SetDpi(dpi).Build()
-	response := make([]byte, 0)
+	var response []byte
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
@@ -55,7 +55,7 @@ func GetPicture(appId, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	return response
 }
 
-func getCoordinatesFromJson(response []byte) (float64, float64) {
+func getCoordinatesFromJSON(response []byte) (float64, float64) {
 	var lat, lon float64
 	js, err := jason.NewObjectFromBytes(response)
 	if err != nil {
