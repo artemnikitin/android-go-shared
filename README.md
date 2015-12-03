@@ -1,5 +1,5 @@
 # android-go-shared
-Shared Go code for https://github.com/artemnikitin/android-go-example
+Shared Go code with using https://github.com/golang/mobile for https://github.com/artemnikitin/android-go-example
 
 #Requirements
 Properly installed version of Go and setup for GOPATH.
