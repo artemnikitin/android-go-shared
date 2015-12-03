@@ -13,7 +13,7 @@ import (
 
 func GetCoordinates(appID, appToken, searchText string) string {
 	builder := builder.NewGeocodingService()
-	builder = builder.SetHost("http://geocoder.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
+	builder = builder.SetHost("https://geocoder.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetSearchPhrase(searchText).Build()
 	var result string
 	resp, err := http.Get(url)
@@ -36,7 +36,7 @@ func GetCoordinates(appID, appToken, searchText string) string {
 
 func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte {
 	builder := builder.NewMapTileService()
-	builder = builder.SetHost("http://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
+	builder = builder.SetHost("https://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetLatitude(lat).SetLongitude(lon).SetWidth(w).SetHeight(h).SetDpi(dpi).Build()
 	var response []byte
 	resp, err := http.Get(url)
