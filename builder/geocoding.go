@@ -47,7 +47,7 @@ func (gs *geocodingService) SetSearchPhrase(text string) GeocodingService {
 func (gs *geocodingService) Build() string {
 	var buffer bytes.Buffer
 	buffer.WriteString(gs.host)
-	buffer.WriteString("/6.2/geocode.json?app_id=")
+	buffer.WriteString("/6.2/search.json?app_id=")
 	buffer.WriteString(gs.appID)
 	buffer.WriteString("&app_code=")
 	buffer.WriteString(gs.appToken)
