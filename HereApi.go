@@ -11,7 +11,7 @@ import (
 	"github.com/artemnikitin/android-go-shared/builder"
 )
 
-type GeocodingResponse struct {
+type geocodingResponse struct {
 	Response struct {
 		MetaInfo struct {
 			Timestamp string `json:"Timestamp"`
@@ -115,7 +115,7 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 }
 
 func getCoordinatesFromJSON(response []byte) (float64, float64) {
-	var geocode = &GeocodingResponse{}
+	var geocode = &geocodingResponse{}
 	err := json.Unmarshal(response, geocode)
 	if err != nil {
 		log.Fatal(err)
