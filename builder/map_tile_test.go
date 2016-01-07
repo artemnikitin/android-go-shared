@@ -11,7 +11,7 @@ func TestMapTileUrl(t *testing.T) {
 	builder = builder.SetHost("http://example.com").SetAppID("xxx").SetAppToken("yyy")
 	url := builder.SetLatitude(11.11).SetLongitude(22.22).SetWidth(23).SetHeight(12).SetDpi(1).Build()
 	if url != expected {
-		log.Fatal(url)
+		log.Println(url)
 		t.Error("Strings should be equal")
 	}
 }

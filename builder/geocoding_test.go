@@ -10,7 +10,7 @@ func TestGeocodingUrl(t *testing.T) {
 	builder := NewGeocodingService()
 	url := builder.SetHost("http://aa.bb").SetAppID("xx").SetAppToken("yy").SetSearchPhrase("sdf dfdf qwe").Build()
 	if url != expected {
-		log.Fatal(url)
+		log.Println(url)
 		t.Error("Strings should be equal")
 	}
 }

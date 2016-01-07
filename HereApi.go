@@ -77,15 +77,15 @@ func GetCoordinates(appID, appToken, searchText string) string {
 	var result string
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
-		log.Fatal("Can't execute HTTP request ...")
+		log.Println(err)
+		log.Println("Can't execute HTTP request ...")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatal(err)
-			log.Fatal("Can't get a JSON response ...")
+			log.Println(err)
+			log.Println("Can't get a JSON response ...")
 		}
 		lat, lon := getCoordinatesFromJSON(bytes)
 		result = createStringFromCoordinates(lat, lon)
@@ -100,15 +100,15 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	var response []byte
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
-		log.Fatal("Can't execute HTTP request ...")
+		log.Println(err)
+		log.Println("Can't execute HTTP request ...")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
 		response, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatal(err)
-			log.Fatal("Can't get a body of HTTP response ...")
+			log.Println(err)
+			log.Println("Can't get a body of HTTP response ...")
 		}
 	}
 	return response
@@ -118,8 +118,8 @@ func getCoordinatesFromJSON(response []byte) (float64, float64) {
 	var geocode = &geocodingResponse{}
 	err := json.Unmarshal(response, geocode)
 	if err != nil {
-		log.Fatal(err)
-		log.Fatal("Can't parse JSON ...")
+		log.Println(err)
+		log.Println("Can't parse JSON ...")
 	}
 	lat := geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
 	lon := geocode.Response.View[0].Result[0].Location.DisplayPosition.Longitude
