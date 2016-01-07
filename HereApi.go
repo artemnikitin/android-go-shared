@@ -116,13 +116,15 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 
 func getCoordinatesFromJSON(response []byte) (float64, float64) {
 	var geocode = &geocodingResponse{}
+	var lat, lon float64
 	err := json.Unmarshal(response, geocode)
 	if err != nil {
 		log.Println(err)
 		log.Println("Can't parse JSON ...")
+	} else {
+		lat = geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
+		lon = geocode.Response.View[0].Result[0].Location.DisplayPosition.Longitude
 	}
-	lat := geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
-	lon := geocode.Response.View[0].Result[0].Location.DisplayPosition.Longitude
 	return lat, lon
 }
 

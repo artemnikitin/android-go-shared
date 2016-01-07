@@ -35,6 +35,16 @@ func TestParseJson(t *testing.T) {
 	}
 }
 
+func TestParseIncorrectJson(t *testing.T) {
+	realJSON := []byte(`24rt2f2f2f2`)
+	lat, lon := getCoordinatesFromJSON(realJSON)
+	if lat != 0.0 || lon != 0.0 {
+		log.Println(lat)
+		log.Println(lon)
+		t.Error("JSON was incorrectly parsed")
+	}
+}
+
 func TestGetCoordinatesRequest(t *testing.T) {
 	coordinates := GetCoordinates(appID, appToken, "Berlin Invalidenstrasse 116")
 	if coordinates != "52.5308599||13.38469" {
