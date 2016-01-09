@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"io"
 
 	"github.com/artemnikitin/android-go-shared/builder"
-	"io"
 )
 
 type geocodingResponse struct {
