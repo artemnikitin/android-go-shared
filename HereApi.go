@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/artemnikitin/android-go-shared/builder"
+	"io"
 )
 
 type geocodingResponse struct {
@@ -77,15 +78,20 @@ func GetCoordinates(appID, appToken, searchText string) string {
 	var result string
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
 		log.Println("Can't execute HTTP request ...")
+		log.Println(err)
+		return result
 	}
-	defer resp.Body.Close()
+	defer func() {
+		io.Copy(ioutil.Discard, resp.Body)
+		resp.Body.Close()
+	}()
 	if resp.StatusCode == 200 {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println(err)
 			log.Println("Can't get a JSON response ...")
+			log.Println(err)
+			return result
 		}
 		lat, lon := getCoordinatesFromJSON(bytes)
 		result = createStringFromCoordinates(lat, lon)
@@ -100,15 +106,20 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	var response []byte
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
 		log.Println("Can't execute HTTP request ...")
+		log.Println(err)
+		return response
 	}
-	defer resp.Body.Close()
+	defer func() {
+		io.Copy(ioutil.Discard, resp.Body)
+		resp.Body.Close()
+	}()
 	if resp.StatusCode == 200 {
 		response, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println(err)
 			log.Println("Can't get a body of HTTP response ...")
+			log.Println(err)
+			return response
 		}
 	}
 	return response
@@ -119,12 +130,12 @@ func getCoordinatesFromJSON(response []byte) (float64, float64) {
 	var lat, lon float64
 	err := json.Unmarshal(response, geocode)
 	if err != nil {
-		log.Println(err)
 		log.Println("Can't parse JSON ...")
-	} else {
-		lat = geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
-		lon = geocode.Response.View[0].Result[0].Location.DisplayPosition.Longitude
+		log.Println(err)
+		return lat, lon
 	}
+	lat = geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
+	lon = geocode.Response.View[0].Result[0].Location.DisplayPosition.Longitude
 	return lat, lon
 }
 
