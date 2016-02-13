@@ -24,8 +24,10 @@ _testmain.go
 *.prof
 
 # IDEA stuff
-.iml
-.idea
+*.iml
+*.idea
 
 # Android stuff
 *.aar
+
+

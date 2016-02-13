@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// MapTileService interface for builder
 type MapTileService interface {
 	SetHost(string) MapTileService
 	SetAppID(string) MapTileService
@@ -28,6 +29,7 @@ type mapService struct {
 	dpi       int
 }
 
+// NewMapTileService return new builder
 func NewMapTileService() MapTileService {
 	return &mapService{}
 }

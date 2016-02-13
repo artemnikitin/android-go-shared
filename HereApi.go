@@ -3,11 +3,11 @@ package hereapi
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-	"io"
 
 	"github.com/artemnikitin/android-go-shared/builder"
 )
@@ -66,11 +66,11 @@ type geocodingResponse struct {
 				Relevance float64 `json:"Relevance"`
 			} `json:"Result"`
 			ViewID int    `json:"ViewId"`
-			_type  string `json:"_type"`
+			Type  string `json:"_type"`
 		} `json:"View"`
 	} `json:"Response"`
 }
-
+// GetCoordinates implements HERE Geocoding API for convert text address to GPS coordinates
 func GetCoordinates(appID, appToken, searchText string) string {
 	builder := builder.NewGeocodingService()
 	builder = builder.SetHost("https://geocoder.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
@@ -99,6 +99,7 @@ func GetCoordinates(appID, appToken, searchText string) string {
 	return result
 }
 
+// GetPicture returns map tile for specific set of GPS coordinates
 func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte {
 	builder := builder.NewMapTileService()
 	builder = builder.SetHost("https://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)

@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// GeocodingService interface for builder
 type GeocodingService interface {
 	SetHost(string) GeocodingService
 	SetAppID(string) GeocodingService
@@ -20,6 +21,7 @@ type geocodingService struct {
 	searchString string
 }
 
+// NewGeocodingService return new builder
 func NewGeocodingService() GeocodingService {
 	return &geocodingService{}
 }
