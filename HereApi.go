@@ -66,10 +66,11 @@ type geocodingResponse struct {
 				Relevance float64 `json:"Relevance"`
 			} `json:"Result"`
 			ViewID int    `json:"ViewId"`
-			Type  string `json:"_type"`
+			Type   string `json:"_type"`
 		} `json:"View"`
 	} `json:"Response"`
 }
+
 // GetCoordinates implements HERE Geocoding API for convert text address to GPS coordinates
 func GetCoordinates(appID, appToken, searchText string) string {
 	builder := builder.NewGeocodingService()
