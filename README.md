@@ -6,4 +6,6 @@ Shared Go code with using https://github.com/golang/mobile for https://github.co
 Properly installed version of Go and setup for GOPATH.
 
 #How to install
-Run ```go get github.com/artemnikitin/android-go-shared``` in command line.
+```
+go get github.com/artemnikitin/android-go-shared
+``` 
