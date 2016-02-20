@@ -77,23 +77,10 @@ func GetCoordinates(appID, appToken, searchText string) string {
 	builder = builder.SetHost("https://geocoder.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetSearchPhrase(searchText).Build()
 	var result string
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Println("Can't execute HTTP request ...")
-		log.Println(err)
-		return result
-	}
-	defer func() {
-		io.Copy(ioutil.Discard, resp.Body)
-		resp.Body.Close()
-	}()
+	resp := sendRequest(url)
+	defer closeAfter(resp)
 	if resp.StatusCode == 200 {
-		bytes, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Println("Can't get a JSON response ...")
-			log.Println(err)
-			return result
-		}
+		bytes := getBody(resp)
 		lat, lon := getCoordinatesFromJSON(bytes)
 		result = createStringFromCoordinates(lat, lon)
 	}
@@ -106,25 +93,36 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	builder = builder.SetHost("https://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetLatitude(lat).SetLongitude(lon).SetWidth(w).SetHeight(h).SetDpi(dpi).Build()
 	var response []byte
-	resp, err := http.Get(url)
+	resp := sendRequest(url)
+	defer closeAfter(resp)
+	if resp.StatusCode == 200 {
+		response = getBody(resp)
+	}
+	return response
+}
+
+func sendRequest(data string) *http.Response {
+	resp, err := http.Get(data)
 	if err != nil {
 		log.Println("Can't execute HTTP request ...")
 		log.Println(err)
-		return response
+		return resp
 	}
-	defer func() {
-		io.Copy(ioutil.Discard, resp.Body)
-		resp.Body.Close()
-	}()
-	if resp.StatusCode == 200 {
-		response, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Println("Can't get a body of HTTP response ...")
-			log.Println(err)
-			return response
-		}
+	return resp
+}
+
+func getBody(resp *http.Response) []byte {
+	response, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("Can't get a body of HTTP response ...")
+		log.Println(err)
 	}
 	return response
+}
+
+func closeAfter(resp *http.Response) {
+	io.Copy(ioutil.Discard, resp.Body)
+	resp.Body.Close()
 }
 
 func getCoordinatesFromJSON(response []byte) (float64, float64) {
