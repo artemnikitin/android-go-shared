@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/artemnikitin/android-go-shared/builder"
+	"github.com/artemnikitin/android-go-shared/logger"
 )
 
 type geocodingResponse struct {
@@ -99,20 +100,13 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 
 func sendRequest(data string) *http.Response {
 	resp, err := http.Get(data)
-	if err != nil {
-		log.Println("Can't execute HTTP request ...")
-		log.Println(err)
-		return resp
-	}
+	logger.ProcessError("Can't execute HTTP request", err)
 	return resp
 }
 
 func getBody(resp *http.Response) []byte {
 	response, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println("Can't get a body of HTTP response ...")
-		log.Println(err)
-	}
+	logger.ProcessError("Can't get a body of HTTP response", err)
 	return response
 }
 
@@ -126,8 +120,7 @@ func getCoordinatesFromJSON(response []byte) (float64, float64) {
 	var lat, lon float64
 	err := json.Unmarshal(response, geocode)
 	if err != nil {
-		log.Println("Can't parse JSON ...")
-		log.Println(err)
+		log.Println("Can't parse JSON:", err)
 		return lat, lon
 	}
 	lat = geocode.Response.View[0].Result[0].Location.DisplayPosition.Latitude
