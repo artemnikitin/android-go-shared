@@ -111,6 +111,7 @@ func getBody(resp *http.Response) []byte {
 }
 
 func closeAfter(resp *http.Response) {
+	// Drain and close the body to let the Transport reuse the connection
 	io.Copy(ioutil.Discard, resp.Body)
 	resp.Body.Close()
 }
