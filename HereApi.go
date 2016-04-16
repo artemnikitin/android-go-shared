@@ -16,8 +16,8 @@ import (
 
 // GetCoordinates implements HERE Geocoding API for convert text address to GPS coordinates
 func GetCoordinates(appID, appToken, searchText string) string {
-	builder := builder.NewGeocodingService().SetHost("https://geocoder.cit.api.here.com")
-	url := builder.SetAppID(appID).SetAppToken(appToken).SetSearchPhrase(searchText).Build()
+	builder := builder.NewGeocodingService().SetAppID(appID).SetAppToken(appToken)
+	url := builder.SetSearchPhrase(searchText).Build()
 	resp := sendRequest(url)
 	defer closeAfter(resp)
 	if resp.StatusCode != 200 {
@@ -30,7 +30,7 @@ func GetCoordinates(appID, appToken, searchText string) string {
 
 // GetPicture returns map tile for specific set of GPS coordinates
 func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte {
-	builder := builder.NewMapTileService().SetHost("https://image.maps.cit.api.here.com").SetAppID(appID).SetAppToken(appToken)
+	builder := builder.NewMapTileService().SetAppID(appID).SetAppToken(appToken)
 	url := builder.SetLatitude(lat).SetLongitude(lon).SetWidth(w).SetHeight(h).SetDpi(dpi).Build()
 	resp := sendRequest(url)
 	defer closeAfter(resp)

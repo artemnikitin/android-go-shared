@@ -23,7 +23,7 @@ type geocodingService struct {
 
 // NewGeocodingService return new builder
 func NewGeocodingService() GeocodingService {
-	return &geocodingService{}
+	return &geocodingService{host: "https://geocoder.cit.api.here.com"}
 }
 
 func (gs *geocodingService) SetHost(host string) GeocodingService {

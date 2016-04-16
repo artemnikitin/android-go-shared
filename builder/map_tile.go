@@ -31,7 +31,7 @@ type mapService struct {
 
 // NewMapTileService return new builder
 func NewMapTileService() MapTileService {
-	return &mapService{}
+	return &mapService{host: "https://image.maps.cit.api.here.com"}
 }
 
 func (ms *mapService) SetHost(host string) MapTileService {
