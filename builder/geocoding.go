@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var params map[string]string
+var geoParams map[string]string
 
 // GeocodingService interface for builder
 type GeocodingService interface {
@@ -24,7 +24,7 @@ type geocodingService struct {
 
 // NewGeocodingService return new builder
 func NewGeocodingService() GeocodingService {
-	params = make(map[string]string)
+	geoParams = make(map[string]string)
 	return &geocodingService{host: "https://geocoder.api.here.com"}
 }
 
@@ -44,7 +44,7 @@ func (gs *geocodingService) SetAppToken(token string) GeocodingService {
 }
 
 func (gs *geocodingService) SetSearchPhrase(text string) GeocodingService {
-	params["searchtext"] = strings.Replace(text, " ", "+", -1)
+	geoParams["searchtext"] = strings.Replace(text, " ", "+", -1)
 	return gs
 }
 
@@ -56,7 +56,7 @@ func (gs *geocodingService) Build() string {
 	buffer.WriteString("&app_code=")
 	buffer.WriteString(gs.appToken)
 	buffer.WriteString("&gen=9")
-	for k, v := range params {
+	for k, v := range geoParams {
 		buffer.WriteString("&")
 		buffer.WriteString(k)
 		buffer.WriteString("=")

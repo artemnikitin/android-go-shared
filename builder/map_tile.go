@@ -5,6 +5,8 @@ import (
 	"strconv"
 )
 
+var tileParams map[string]string
+
 // MapTileService interface for builder
 type MapTileService interface {
 	SetHost(string) MapTileService
@@ -24,14 +26,12 @@ type mapService struct {
 	appToken  string
 	latitude  float64
 	longitude float64
-	height    int
-	width     int
-	dpi       int
 }
 
 // NewMapTileService return new builder
 func NewMapTileService() MapTileService {
-	return &mapService{host: "https://image.maps.cit.api.here.com"}
+	tileParams = make(map[string]string)
+	return &mapService{host: "https://image.maps.api.here.com"}
 }
 
 func (ms *mapService) SetHost(host string) MapTileService {
@@ -60,17 +60,17 @@ func (ms *mapService) SetLongitude(coordinate float64) MapTileService {
 }
 
 func (ms *mapService) SetHeight(value int) MapTileService {
-	ms.height = value
+	tileParams["h"] = strconv.Itoa(value)
 	return ms
 }
 
 func (ms *mapService) SetWidth(value int) MapTileService {
-	ms.width = value
+	tileParams["w"] = strconv.Itoa(value)
 	return ms
 }
 
 func (ms *mapService) SetDpi(value int) MapTileService {
-	ms.dpi = value
+	tileParams["ppi"] = strconv.Itoa(value)
 	return ms
 }
 
@@ -85,12 +85,12 @@ func (ms *mapService) Build() string {
 	buffer.WriteString(strconv.FormatFloat(ms.latitude, 'f', -1, 64))
 	buffer.WriteString(",")
 	buffer.WriteString(strconv.FormatFloat(ms.longitude, 'f', -1, 64))
-	buffer.WriteString("&h=")
-	buffer.WriteString(strconv.Itoa(ms.height))
-	buffer.WriteString("&w=")
-	buffer.WriteString(strconv.Itoa(ms.width))
-	buffer.WriteString("&ppi=")
-	buffer.WriteString(strconv.Itoa(ms.dpi))
 	buffer.WriteString("&z=18&u=10")
+	for k, v := range tileParams {
+		buffer.WriteString("&")
+		buffer.WriteString(k)
+		buffer.WriteString("=")
+		buffer.WriteString(v)
+	}
 	return buffer.String()
 }
