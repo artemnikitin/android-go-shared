@@ -43,6 +43,26 @@ func GetPicture(appID, appToken string, lat, lon float64, h, w, dpi int) []byte 
 	return getBody(resp)
 }
 
+// GetAutosuggestions returns a struct that represent lisr of suggestion for input from HERE API
+func GetAutosuggestions(appID, appToken, searchPhrase string, lat, lon float64) *model.AutosuggestionResponse {
+	res := &model.AutosuggestionResponse{}
+	url := builder.NewAutosuggestionService().
+		SetAppID(appID).SetAppToken(appToken).
+		SetLatitude(lat).SetLongitude(lon).
+		SetSearchPhrase(searchPhrase).Build()
+	resp := sendRequest(url)
+	defer closeAfter(resp)
+	if resp.StatusCode != 200 {
+		return res
+	}
+	err := json.Unmarshal(getBody(resp), res)
+	if err != nil {
+		log.Println("Can't parse JSON:", err)
+		return res
+	}
+	return res
+}
+
 func sendRequest(data string) *http.Response {
 	resp, err := http.Get(data)
 	logger.ProcessError("Can't execute HTTP request", err)

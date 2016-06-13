@@ -68,3 +68,11 @@ func TestCreateStringFromCoordinates(t *testing.T) {
 		t.Error("Incorrect creation of string from coordinates")
 	}
 }
+
+func TestGetAutosuggestions(t *testing.T) {
+	result := GetAutosuggestions(appID, appToken, "Invalidens", 52.5308599, 13.38469)
+	if result == nil || result.Suggestions == nil || result.Suggestions[0].Address.Street == "" {
+		log.Println(result)
+		t.Error("Should return a valid struct in response")
+	}
+}
