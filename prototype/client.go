@@ -21,7 +21,7 @@ type Config struct {
 	client   HTTPDoer
 }
 
-// HereAPI
+// HereAPI represents ...
 type HereAPI struct {
 	appID    string
 	appToken string
@@ -43,6 +43,7 @@ func NewClient(config *Config) *HereAPI {
 	return api
 }
 
+// GetPicture return map tile from HERE API
 func (a *HereAPI) GetPicture(params map[string]string) []byte {
 	url := builder.NewMapTileService().
 		SetAppID(a.appID).SetAppToken(a.appToken).
