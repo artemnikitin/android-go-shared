@@ -43,11 +43,10 @@ func NewClient(config *Config) *HereAPI {
 	return api
 }
 
-func (a *HereAPI) GetPicture(lat, lon float64, h, w, dpi int) []byte {
+func (a *HereAPI) GetPicture(params map[string]string) []byte {
 	url := builder.NewMapTileService().
 		SetAppID(a.appID).SetAppToken(a.appToken).
-		SetLatitude(lat).SetLongitude(lon).
-		SetWidth(w).SetHeight(h).SetDpi(dpi).Build()
+		SetParameters(params).NewBuild()
 	resp, err := a.client.Get(url)
 	if err != nil {
 		return make([]byte, 0)

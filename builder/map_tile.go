@@ -5,8 +5,6 @@ import (
 	"strconv"
 )
 
-var tileParams map[string]string
-
 // MapTileService interface for builder
 type MapTileService interface {
 	SetHost(string) MapTileService
@@ -17,7 +15,9 @@ type MapTileService interface {
 	SetHeight(int) MapTileService
 	SetWidth(int) MapTileService
 	SetDpi(int) MapTileService
+	SetParameters(map[string]string) MapTileService
 	Build() string
+	NewBuild() string
 }
 
 type mapService struct {
@@ -26,11 +26,11 @@ type mapService struct {
 	appToken  string
 	latitude  float64
 	longitude float64
+	params    map[string]string
 }
 
 // NewMapTileService return new builder
 func NewMapTileService() MapTileService {
-	tileParams = make(map[string]string)
 	return &mapService{host: "https://image.maps.api.here.com"}
 }
 
@@ -60,17 +60,22 @@ func (ms *mapService) SetLongitude(coordinate float64) MapTileService {
 }
 
 func (ms *mapService) SetHeight(value int) MapTileService {
-	tileParams["h"] = strconv.Itoa(value)
+	ms.params["h"] = strconv.Itoa(value)
 	return ms
 }
 
 func (ms *mapService) SetWidth(value int) MapTileService {
-	tileParams["w"] = strconv.Itoa(value)
+	ms.params["w"] = strconv.Itoa(value)
 	return ms
 }
 
 func (ms *mapService) SetDpi(value int) MapTileService {
-	tileParams["ppi"] = strconv.Itoa(value)
+	ms.params["ppi"] = strconv.Itoa(value)
+	return ms
+}
+
+func (ms *mapService) SetParameters(params map[string]string) MapTileService {
+	ms.params = params
 	return ms
 }
 
@@ -86,7 +91,23 @@ func (ms *mapService) Build() string {
 	buffer.WriteString(",")
 	buffer.WriteString(strconv.FormatFloat(ms.longitude, 'f', -1, 64))
 	buffer.WriteString("&z=18&u=10")
-	for k, v := range tileParams {
+	for k, v := range ms.params {
+		buffer.WriteString("&")
+		buffer.WriteString(k)
+		buffer.WriteString("=")
+		buffer.WriteString(v)
+	}
+	return buffer.String()
+}
+
+func (ms *mapService) NewBuild() string {
+	var buffer bytes.Buffer
+	buffer.WriteString(ms.host)
+	buffer.WriteString("/mia/1.6/mapview?app_id=")
+	buffer.WriteString(ms.appID)
+	buffer.WriteString("&app_code=")
+	buffer.WriteString(ms.appToken)
+	for k, v := range ms.params {
 		buffer.WriteString("&")
 		buffer.WriteString(k)
 		buffer.WriteString("=")
