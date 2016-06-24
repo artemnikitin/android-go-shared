@@ -14,14 +14,7 @@ type HTTPDoer interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-// Config represents config for HERE API client
-type Config struct {
-	appID    string
-	appToken string
-	client   HTTPDoer
-}
-
-// HereAPI represents ...
+// HereAPI represents basic info about HERE API
 type HereAPI struct {
 	appID    string
 	appToken string
@@ -29,12 +22,12 @@ type HereAPI struct {
 }
 
 // NewClient creates a new client for HERE API
-func NewClient(config *Config) *HereAPI {
+func NewClient(id, token string, c HTTPDoer) *HereAPI {
 	api := &HereAPI{
-		appID:    config.appID,
-		appToken: config.appToken,
+		appID:    id,
+		appToken: token,
 	}
-	httpClient, ok := config.client.(*http.Client)
+	httpClient, ok := c.(*http.Client)
 	if !ok {
 		api.client = http.DefaultClient
 	} else {
@@ -62,6 +55,7 @@ func (a *HereAPI) GetPicture(params map[string]string) []byte {
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
+		return make([]byte, 0)
 	}
 	return bytes
 }

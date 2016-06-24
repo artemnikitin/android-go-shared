@@ -11,10 +11,7 @@ var (
 )
 
 func TestGetPicturePositive(t *testing.T) {
-	client := NewClient(&Config{
-		appID:    appID,
-		appToken: appToken,
-	})
+	client := NewClient(appID, appToken, nil)
 	image := client.GetPicture(map[string]string{
 		"c":   "52.5308599,13.38469",
 		"z":   "18",
