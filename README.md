@@ -7,5 +7,5 @@ Properly installed version of Go and setup for GOPATH. For additional instructio
 
 #How to install
 ```
-go get github.com/artemnikitin/android-go-shared
+go get -u github.com/artemnikitin/android-go-shared
 ``` 
